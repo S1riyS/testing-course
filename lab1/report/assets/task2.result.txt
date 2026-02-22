@@ -1,0 +1,10 @@
+> Task :task2:test
+Binomial Heap > extractMinon heap with one element with reverse PASSED
+Binomial Heap > Correctness of operations - several inserts and extractMins PASSED
+Binomial Heap > Merge of two T0 PASSED
+Binomial Heap > Exception when extractMin on empty heap PASSED
+Binomial Heap > getMin on heap with one element PASSED
+Binomial Heap > extractMin on heap with one element PASSED
+Binomial Heap > Exception when getMin on empty heap PASSED
+Binomial Heap > Merge of T1 and T0 PASSED
+Binomial Heap > Insert into empty heap PASSED
