@@ -1,20 +1,17 @@
 package testing.lab1.task1;
 
 public final class Trigonometry {
-
-    private static final double EPS = Double.MIN_VALUE;
-
     public static double cos(double x) {
-        return cos(x, Integer.MAX_VALUE);
+        return cos(x, Double.MIN_VALUE);
     }
 
-    public static double cos(double x, int n) {
+    public static double cos(double x, double eps) {
         if (Double.isNaN(x) || Double.isInfinite(x)) {
             return Double.NaN;
         }
 
         x = reduceAngle(x);
-        return calculateSeries(x, n);
+        return calculateSeries(x, eps);
     }
 
     private static double reduceAngle(double x) {
@@ -28,16 +25,15 @@ public final class Trigonometry {
         return x;
     }
 
-    private static double calculateSeries(double x, int maxTerms) {
+    private static double calculateSeries(double x, double eps) {
         double sum = 1.0;
         double term = 1.0;
+        int n = 1;
 
-        for (int n = 1; n <= maxTerms; n++) {
-            term *= -x * x / ((2 * n - 1) * (2 * n));
+        while (Math.abs(term) > eps) {
+            term *= -x * x / ((2.0 * n - 1) * (2.0 * n));
             sum += term;
-
-            if (Math.abs(term) <= EPS)
-                break;
+            n++;
         }
 
         return sum;
