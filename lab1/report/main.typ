@@ -6,7 +6,7 @@
 #set heading(numbering: "1.")
 #show heading: set par(first-line-indent: 0pt)
 
-#show raw: set text(font: "Liberation Mono", size: 11pt)
+#show raw: set text(font: "Liberation Mono")
 #let source(path, lang) = block(
   fill: luma(240),
   stroke: 0.5pt + luma(180),
@@ -161,52 +161,28 @@ $ frac(d^2, d x^2)cos(x) = -cos(x) = 0 => frac(pi, 2) + pi n, n in ZZ $
 == Описание реализации
 
 Биномиальная куча (Binomial Heap) — структура данных, представляющая собой
-набор биномиальных деревьев, упорядоченных по степени. Реализованы операции:
-`insert`, `getMin`, `extractMin`. Слияние куч (`merge`) является вспомогательной
-операцией, используемой внутри остальных.
+набор биномиальных деревьев, упорядоченных по степени. Реализованы ключевые методы:
+- `insert`
+- `extractMin`
 
-Для сохранения трэйса выполнения, в реализацию добавлено поле класса `TraversalTracer`.
-Характерные точки выделены в `enum` `TracePoint`:
+== Методика тестирования
+Тестирование проводится при помощи *таблицы решений*.
 
-#table(
-  columns: (auto, 1fr),
-  stroke: 0.5pt,
-  align: (left, left),
-  fill: (_, row) => if row == 0 { luma(230) } else { none },
-  [*Точка*], [*Место вызова*],
-  [`INSERT`], [Начало метода `insert`],
-  [`MERGE`], [Начало метода `merge`],
-  [`MERGE_LISTS`], [Слияние двух корневых списков по степени в `mergeLists`],
-  [`CONSOLIDATE`], [Устранение деревьев одинаковой степени в `consolidate`],
-  [`EXTRACT_MIN`], [Начало метода `extractMin`],
-  [`GET_MIN`], [Начало метода `getMin`],
-  [`REVERSE`], [Разворот списка дочерних узлов в `reverseList`],
-)
+=== Таблицы решений для `insert`
 
-== Тестовые случаи
+// TODO
 
-#table(
-  columns: (1fr, auto),
-  stroke: 0.5pt,
-  align: (left, left),
-  fill: (_, row) => if row == 0 { luma(230) } else { none },
-  [*Сценарий*], [*Ожидаемый результат*],
-  [Вставка в пустую кучу], [`INSERT → MERGE`],
-  [Вставка второго элемента (слияние двух $T_0$)], [`INSERT → MERGE → MERGE_LISTS`],
-  [Вставка третьего элемента (слияние $T_1$ и $T_0$)], [`INSERT → MERGE → MERGE_LISTS → CONSOLIDATE`],
-  [`getMin` при одном элементе], [`GET_MIN`],
-  [`extractMin` при одном элементе], [`EXTRACT_MIN`],
-  [`extractMin` при двух элементах (с разворотом детей)], [`EXTRACT_MIN → REVERSE → MERGE`],
-  [Корректность порядка извлечения (5 элементов)], [Проверка значений, без трэйса],
-  [`getMin` на пустой куче], [`NoSuchElementException`],
-  [`extractMin` на пустой куче], [`NoSuchElementException`],
-)
+=== Таблицы решений для `extractMin`
+
+// TODO
 
 == Результаты
 
 #source("assets/task2.result.txt", "text")
 
 Все 9 тестов пройдены успешно. Неудачных тестов нет.
+
+#pagebreak()
 
 // ─────────────────────────── Задание 3 ───────────────────────────
 
@@ -231,64 +207,181 @@ $ frac(d^2, d x^2)cos(x) = -cos(x) = 0 => frac(pi, 2) + pi n, n in ZZ $
 
 Из текста выделены следующие сущности и их отношения:
 
-#table(
-  columns: (auto, 1fr),
-  stroke: 0.5pt,
-  align: (left, left),
-  fill: (_, row) => if row == 0 { luma(230) } else { none },
-  [*Класс / тип*], [*Ключевые атрибуты*],
-  [`Person`], [`location`, `emotion`],
-  [`Child`], [`size`, `location`],
-  [`Horse`], [`wild: boolean`, `location`],
-  [`Supply`], [`fences: List<ReinforcedFence>`],
-  [`ReinforcedFence`], [`freshness: Freshness`, `reinforced = true`],
-  [`Location`], [`getName(): String`],
-  [`Pavement`], [impl. `Location`],
-  [`Sand`], [impl. `Location`],
-  [`Sky`], [impl. `Location`],
-  [`UnknownRegions`], [impl. `Location`],
-  [`Size`], [`HUGE`, `NORMAL`],
-  [`Freshness`], [`FRESH`, `STALE`],
-  [`Emotion`], [`CALM`, `SOMEWHAT_WORRIED`, `WORRIED`],
-  [`Observable`], [Маркерный интерфейс],
-)
+*\#TODO: insert UML diagram*
 
-== Тестовые случаи
+== Методика тестирования
 
-Проверяют, что сущности, их поведение и свойства соответствуют тому,
-что описано в #link(<domain-model-text>)[исходном текста]
+Тестирование проводится при помощи *таблицы переходов*.
 
-#table(
-  columns: (auto, 1fr),
-  stroke: 0.5pt,
-  align: (left, left),
-  fill: (_, row) => if row == 0 { luma(230) } else { none },
-  [*Тест*], [*Что проверяется*],
-  [`theyAreOnThePavement`], [Оба человека находятся на мостовой],
-  [`pavementIsCalledPavement`], [Название локации «мостовая»],
-  [`watchingHugeChildCausesSomeWorry`], [Наблюдение за ребёнком → `SOMEWHAT_WORRIED`],
-  [`worryIsSomeNotExtreme`], [Состояние не равно `WORRIED` (не полное беспокойство)],
-  [`childrenAreHuge`], [Размер ребёнка — `HUGE`],
-  [`childrenAreNotNormalSized`], [Размер не равен `NORMAL`],
-  [`childrenJumpOnSand`], [Ребёнок прыгает на песок],
-  [`sandIsCalledSand`], [Название локации «песок»],
-  [`childHasNoLocationBeforeJumping`], [Новый ребёнок не имеет местоположения],
-  [`horsesAreWild`], [Лошадь является дикой],
-  [`horsesArriveAtUnknownRegions`], [Лошадь прибывает в Неизведанные Области],
-  [`unknownRegionsIsCalledCorrectly`], [Название «Неизведанные Области»],
-  [`routeGoesthroughTheSky`], [Название маршрута «небо»],
-  [`horseHasNoDestinationBeforePulling`], [Новая лошадь не имеет местоположения],
-  [`suppliesAreFresh`], [Запас из свежих изгородей — свежий],
-  [`supplyWithOneStaleFenceIsNotFresh`], [Запас с одной несвежей изгородью — не свежий],
-  [`allFencesInSupplyAreReinforced`], [Все изгороди в запасе армированы],
-  [`fenceIsAlwaysReinforced...`], [Армированность не зависит от свежести],
-)
+=== Таблицы переходов `Person`
+
+Таблица `watch`:
+#text(size: 9pt)[
+  #table(
+    columns: (auto, auto, 1fr, auto, 1fr),
+    stroke: 0.5pt,
+    align: (left, left, left, left, left),
+    fill: (_, row) => if row == 0 { luma(230) } else { none },
+    [№], [Текущее состояние], [Вход / условие], [Следующее состояние], [Ожидаемый результат],
+    [1], [(нет объекта)], [`init`], [`CALM`], [`emotion == CALM`],
+    [2], [`ANY`], [`watchChild(size = HUGE)`], [`SOMEWHAT_WORRIED`], [`emotion == SOMEWHAT_WORRIED`],
+    [3], [`ANY`], [`watchChild(size = NORMAL)`], [`CALM`], [`emotion == CALM`],
+    [4], [`ANY`], [`watchHorse(wild = true)`], [`WORRIED`], [`emotion == WORRIED`],
+    [5], [`ANY`], [`watch(null)`], [(исключение)], [`IllegalArgumentException`],
+  )
+]
+
+#block(above: 2em)[
+  #figure(
+    image("assets/images/person_emotion.png", width: 100%),
+    caption: [Конечный автомат эмоций `Person`],
+  )
+]
+
+#pagebreak()
+
+Таблица `sitOn`:
+#text(size: 9pt)[
+  #table(
+    columns: (auto, auto, 1fr, auto, 1fr),
+    stroke: 0.5pt,
+    align: (left, left, left, left, left),
+    fill: (_, row) => if row == 0 { luma(230) } else { none },
+    [№], [Текущее состояние], [Вход / условие], [Следующее состояние], [Ожидаемый результат],
+    [1], [(нет объекта)], [`init()`], [`NO_LOCATION`], [`location == null`],
+    [2], [`NO_LOCATION`], [`sitOn(location != null)`], [`AT_LOCATION(L)`], [`location == L`],
+    [3], [`NO_LOCATION`], [`sitOn(null)`], [(исключение)], [`IllegalArgumentException("Location cannot be null")`],
+    [4],
+    [`AT_LOCATION(L)`],
+    [`sitOn(location == L)`],
+    [(исключение)],
+    [`IllegalArgumentException("Person is already at this location")`],
+
+    [5], [`AT_LOCATION(L1)`], [`sitOn(location = L2), L2 != null, L2 != L1`], [`AT_LOCATION(L2)`], [`location == L2`],
+  )
+]
+
+#block(above: 2em)[
+  #figure(
+    image("assets/images/person_location.png", width: 100%),
+    caption: [Конечный автомат местоположений `Person`],
+  )
+]
+
+#pagebreak()
+
+=== Таблицы переходов `Child`
+
+#text(size: 9pt)[
+  #table(
+    columns: (auto, auto, 4cm, auto, 4cm),
+    // Фиксированная ширина для текстовых колонок
+    stroke: 0.5pt,
+    align: (left, left, left, left, left),
+    fill: (_, row) => if row == 0 { luma(230) } else { none },
+    [№], [Текущее состояние], [Вход / условие], [Следующее состояние], [Ожидаемый результат],
+    [1], [(нет объекта)], [`init(size != null)`], [`NO_LOCATION`], [```location == null```, размер сохранён],
+    [2], [(нет объекта)], [`init(size == null)`], [(исключение)], [`IllegalArgumentException("Size cannot be null")`],
+    [3], [`NO_LOCATION`], [`jumpOn(sand != null)`], [`ON_SAND`], [`location == sand`],
+    [4], [`NO_LOCATION`], [`jumpOn(sand == null)`], [(исключение)], [`IllegalArgumentException("Sand cannot be null")`],
+    [5], [`ON_SAND`], [`jumpOn(sand != null)`], [`ON_SAND`], [Локация меняется на новый `sand`],
+  )
+]
+
+#block(above: 2em)[
+  #figure(
+    image("assets/images/child.png", width: 100%),
+    caption: [Конечный автомат прыжков `Child` на песке],
+  )
+]
+
+#pagebreak()
+
+=== Таблицы переходов `Horse`
+
+#text(size: 9pt)[
+  #table(
+    columns: (auto, auto, 1fr, auto, 1fr),
+    stroke: 0.5pt,
+    align: (left, left, left, left, left),
+    fill: (_, row) => if row == 0 { luma(230) } else { none },
+    [№], [Текущее состояние], [Вход / условие], [Следующее состояние], [Ожидаемый результат],
+    [1], [(нет объекта)], [`init(wild)`], [`NO_DESTINATION`], [`location == null`],
+    [2],
+    [`NO_DESTINATION`],
+    [`pull(cargo != null, sky != null, destination != null)`],
+    [`AT_UNKNOWN_REGIONS`],
+    [`location == destination`],
+
+    [3],
+    [`NO_DESTINATION`],
+    [`pull(cargo == null, sky != null, destination != null)`],
+    [(исключение)],
+    [`IllegalArgumentException("Cargo cannot be null")`],
+
+    [4],
+    [`NO_DESTINATION`],
+    [`pull(cargo != null, sky == null, destination != null)`],
+    [(исключение)],
+    [`IllegalArgumentException("'Through' cannot be null")`],
+
+    [5],
+    [`NO_DESTINATION`],
+    [`pull(cargo != null, sky != null, destination == null)`],
+    [(исключение)],
+    [`IllegalArgumentException("Destination cannot be null")`],
+  )
+]
+
+#block(above: 2em)[
+  #figure(
+    image("assets/images/horse.png", width: 100%),
+    caption: [Конечный автомат местоположений `Horse`],
+  )
+]
+
+#pagebreak()
+
+=== Таблицы переходов `Supply`
+
+#text(size: 9pt)[
+  #table(
+    columns: (auto, auto, 1fr, auto, 1fr),
+    stroke: 0.5pt,
+    align: (left, left, left, left, left),
+    fill: (_, row) => if row == 0 { luma(230) } else { none },
+    [№], [Текущее состояние], [Вход / условие], [Следующее состояние], [Ожидаемый результат],
+    [1],
+    [(нет объекта)],
+    [`init(fences == null)`],
+    [(исключение)],
+    [`IllegalArgumentException("Supply must contain at least one fence")`],
+
+    [2],
+    [(нет объекта)],
+    [`init(fences.isEmpty())`],
+    [(исключение)],
+    [`IllegalArgumentException("Supply must contain at least one fence")`],
+
+    [3], [(нет объекта)], [`init(all fences FRESH)`], [`FRESH`], [`getOverallFreshness() == Freshness.FRESH`],
+    [4], [(нет объекта)], [`init(any fence STALE)`], [`STALE`], [`getOverallFreshness() == Freshness.STALE`],
+  )
+]
+
+#block(above: 2em)[
+  #figure(
+    image("assets/images/supply.png", width: 100%),
+    caption: [Конечный автомат свежести `Supply`],
+  )
+]
+
+#pagebreak()
 
 == Результаты
 
 #source("assets/task3.result.txt", "text")
 
-Все 18 тестов пройдены успешно. Неудачных тестов нет.
+Все тесты пройдены успешно. Неудачных тестов нет.
 
 // ─────────────────────────── Заключение ───────────────────────────
 

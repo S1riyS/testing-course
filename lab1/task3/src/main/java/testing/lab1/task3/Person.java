@@ -12,6 +12,9 @@ public class Person {
         if (location == null) {
             throw new IllegalArgumentException("Location cannot be null");
         }
+        if (this.location == location) {
+            throw new IllegalArgumentException("Person is already at this location");
+        }
         this.location = location;
     }
 
@@ -24,6 +27,8 @@ public class Person {
             Child child = (Child) target;
             if (child.getSize() == Size.HUGE) {
                 this.emotion = Emotion.SOMEWHAT_WORRIED;
+            } else if (child.getSize() == Size.NORMAL) {
+                this.emotion = Emotion.CALM;
             }
         } else if (target instanceof Horse) {
             Horse horse = (Horse) target;
