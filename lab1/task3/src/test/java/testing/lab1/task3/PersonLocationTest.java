@@ -46,7 +46,7 @@ class PersonLocationTest {
     }
 
     @Test
-    void fromSandSitOnNull_changesLocationToPavement() {
+    void fromSandSitOnNull_throwsIllegalArgumentException() {
         Person person = new Person();
         Sand sand = new Sand();
 

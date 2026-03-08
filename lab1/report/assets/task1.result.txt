@@ -1,9 +1,0 @@
-> Task :task1:test
-cos(x) to Tailor series > Boundaries > cos(NaN) = NaN PASSED
-cos(x) to Tailor series > Boundaries > cos(Infinity) = NaN PASSED
-cos(x) to Tailor series > Boundaries > cos(-Infinity) = NaN PASSED
-cos(x) to Tailor series > Boundaries > cos(3.141592653589793) = -1 PASSED
-cos(x) to Tailor series > Boundaries > cos(-3.141592653589793) = -1 PASSED
-cos(x) to Tailor series > Equivalence classes > cos(10.0) = -0.8390715291 PASSED
-cos(x) to Tailor series > Equivalence classes > cos(0.0) = 1.0 PASSED
-cos(x) to Tailor series > Equivalence classes > cos(-1.0) = 0.5403023059 PASSED

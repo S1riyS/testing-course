@@ -93,25 +93,8 @@ $ cos(x) = sum_(n=0)^(infinity) frac((-1)^n x^(2n), (2n)!) = 1 - frac(x^2, 2!) +
 
 Тестирование проводится при помощи *анализа эквивалентности*.
 
-$ frac(d, d x)cos(x) = -sin(x) = 0 => x = pi n, n in ZZ $
-$ frac(d^2, d x^2)cos(x) = -cos(x) = 0 => frac(pi, 2) + pi n, n in ZZ $
-
-- Граничные значения:
-  + $x = 0$
-  + $x = frac(pi, 2)$
-  + $x = pi$
-  + $x = frac(3pi, 2)$
-  + $x = 2pi$
-
-- Граничные значения (с точки зрения языка прогрммирования):
-  + $x = "NaN"$
-  + $x = ±infinity$
-
-- Области эквивалентности:
-  + $(0; frac(pi, 2))$
-  + $(frac(pi, 2); pi)$
-  + $(pi; frac(3pi, 2))$
-  + $(frac(3pi, 2); 2pi)$
+$ frac(d, d x)cos(x) = 0 => -sin(x) = 0 => x = pi n, n in ZZ $
+$ frac(d^2, d x^2)cos(x) = 0 => -cos(x) = 0 => frac(pi, 2) + pi n, n in ZZ $
 
 #box(
   width: 100%,
@@ -123,7 +106,30 @@ $ frac(d^2, d x^2)cos(x) = -cos(x) = 0 => frac(pi, 2) + pi n, n in ZZ $
   *Note:* $cos(x)$ --- функция с периодом $2pi$
 ]
 
+- Граничные значения:
+  + $x = 0 + 2pi n$
+  + $x = frac(pi, 2) + 2pi n$
+  + $x = pi + 2pi n$
+  + $x = frac(3pi, 2) + 2pi n$
+
+- Граничные значения (с точки зрения языка прогрммирования):
+  + $x = "NaN"$
+  + $x = ±infinity$
+
+- Области эквивалентности:
+  + $(0; frac(pi, 2)) + 2pi n$
+  + $(frac(pi, 2); pi) + 2pi n$
+  + $(pi; frac(3pi, 2)) + 2pi n$
+  + $(frac(3pi, 2); 2pi) + 2pi n$
+
 #pagebreak()
+
+#block(above: 2em)[
+  #figure(
+    image("assets/images/cos.png", width: 100%),
+    caption: [$cos(x)$],
+  )
+]
 
 Тестовое покрытие:
 
@@ -136,21 +142,26 @@ $ frac(d^2, d x^2)cos(x) = -cos(x) = 0 => frac(pi, 2) + pi n, n in ZZ $
   [$x = "NaN"$], [$"NaN"$], [$checkmark$],
   [$x = ± infinity$], [$"NaN"$], [$checkmark$],
   [$x = 0$], [$1$], [$checkmark$],
-  [$x = frac(pi, 4)$], [$0,7071067812$], [$crossmark$],
+  [$x = frac(pi, 4)$], [$0.7071067812$], [$crossmark$ (Область 1)],
   [$x = frac(pi, 2)$], [$0$], [$checkmark$],
-  [$x = frac(3pi, 4)$], [$-0,7071067812$], [$crossmark$],
+  [$x = frac(3pi, 4)$], [$-0.7071067812$], [$crossmark$ (Область 2)],
   [$x = pi$], [$-1$], [$checkmark$],
-  [$x = frac(5pi, 4)$], [$-0,7071067812$], [$crossmark$],
+  [$x = frac(5pi, 4)$], [$-0.7071067812$], [$crossmark$ (Область 3)],
   [$x = frac(3pi, 2)$], [$0$], [$checkmark$],
-  [$x = frac(7pi, 4)$], [$0,7071067812$], [$crossmark$],
+  [$x = frac(7pi, 4)$], [$0.7071067812$], [$crossmark$ (Область 4)],
   [$x = 2pi$], [$1$], [$checkmark$],
+  [$x = -999$], [$0.999649853$], [$crossmark$ (Внешняя точка)],
+  [$x = 777$], [$-0.5177182207$], [$crossmark$ (Внешняя точка)],
 )
 
 == Результаты
 
-#source("assets/task1.result.txt", "text")
-
-Все тесты пройдены успешно.
+#block(above: 2em)[
+  #figure(
+    image("assets/results/task1.png", width: 100%),
+    caption: [Результаты тестов для задания №1],
+  )
+]
 
 #pagebreak()
 
@@ -168,19 +179,61 @@ $ frac(d^2, d x^2)cos(x) = -cos(x) = 0 => frac(pi, 2) + pi n, n in ZZ $
 == Методика тестирования
 Тестирование проводится при помощи *таблицы решений*.
 
+Условия — *наличие/отсутствие* деревьев рангов 0, 1, 2 в корневом списке до операции.
+Действия — проверка соответствия внутреннего состояния теоретическому либо ожидание исключения.
+
 === Таблицы решений для `insert`
 
-// TODO
+#text(size: 9pt)[
+  #table(
+    columns: (1.2fr, auto, auto, auto, auto, auto, auto, auto, auto),
+    stroke: 0.5pt,
+    align: (left, center, center, center, center, center, center, center, center),
+    fill: (_, row) => if row == 0 or row == 5 { luma(240) } else { none },
+    [*Таблица решений для `insert`*], [T1], [T2], [T3], [T4], [T5], [T6], [T7], [T8],
+    [*Условия*], [], [], [], [], [], [], [], [],
+    [$exists B_0$], [], [+], [], [], [+], [+], [], [+],
+    [$exists B_1$], [], [], [+], [], [+], [], [+], [+],
+    [$exists B_2$], [], [], [], [+], [], [+], [+], [+],
+    [], [], [], [], [], [], [], [], [],
+    [*Действия*], [], [], [], [], [], [], [], [],
+    [Состояние = теоретическое], [+], [+], [+], [+], [+], [+], [+], [+],
+  )
+]
+
+#v(1em)
 
 === Таблицы решений для `extractMin`
 
-// TODO
+#text(size: 9pt)[
+  #table(
+    columns: (1.2fr, auto, auto, auto, auto, auto, auto, auto, auto),
+    stroke: 0.5pt,
+    align: (left, center, center, center, center, center, center, center, center),
+    fill: (_, row) => if row == 0 or row == 5 { luma(240) } else { none },
+    [*Таблица решений для `extractMin`*], [T1], [T2], [T3], [T4], [T5], [T6], [T7], [T8],
+    [*Условия*], [], [], [], [], [], [], [], [],
+    [$exists B_0$], [], [+], [], [], [+], [+], [], [+],
+    [$exists B_1$], [], [], [+], [], [+], [], [+], [+],
+    [$exists B_2$], [], [], [], [+], [], [+], [+], [+],
+    [], [], [], [], [], [], [], [], [],
+    [*Действия*], [], [], [], [], [], [], [], [],
+    [Ожидаем исключение], [+], [], [], [], [], [], [], [],
+    [Корректное значение min], [], [+], [+], [+], [+], [+], [+], [+],
+    [Состояние = теоретическое], [], [+], [+], [+], [+], [+], [+], [+],
+  )
+]
+
+#pagebreak()
 
 == Результаты
 
-#source("assets/task2.result.txt", "text")
-
-Все 9 тестов пройдены успешно. Неудачных тестов нет.
+#block(above: 2em)[
+  #figure(
+    image("assets/results/task2.png", width: 100%),
+    caption: [Результаты тестов для задания №2],
+  )
+]
 
 #pagebreak()
 
@@ -233,7 +286,7 @@ $ frac(d^2, d x^2)cos(x) = -cos(x) = 0 => frac(pi, 2) + pi n, n in ZZ $
 
 #block(above: 2em)[
   #figure(
-    image("assets/images/person_emotion.png", width: 100%),
+    image("assets/state_machines/person_emotion.png", width: 100%),
     caption: [Конечный автомат эмоций `Person`],
   )
 ]
@@ -263,7 +316,7 @@ $ frac(d^2, d x^2)cos(x) = -cos(x) = 0 => frac(pi, 2) + pi n, n in ZZ $
 
 #block(above: 2em)[
   #figure(
-    image("assets/images/person_location.png", width: 100%),
+    image("assets/state_machines/person_location.png", width: 100%),
     caption: [Конечный автомат местоположений `Person`],
   )
 ]
@@ -290,7 +343,7 @@ $ frac(d^2, d x^2)cos(x) = -cos(x) = 0 => frac(pi, 2) + pi n, n in ZZ $
 
 #block(above: 2em)[
   #figure(
-    image("assets/images/child.png", width: 100%),
+    image("assets/state_machines/child.png", width: 100%),
     caption: [Конечный автомат прыжков `Child` на песке],
   )
 ]
@@ -335,7 +388,7 @@ $ frac(d^2, d x^2)cos(x) = -cos(x) = 0 => frac(pi, 2) + pi n, n in ZZ $
 
 #block(above: 2em)[
   #figure(
-    image("assets/images/horse.png", width: 100%),
+    image("assets/state_machines/horse.png", width: 100%),
     caption: [Конечный автомат местоположений `Horse`],
   )
 ]
@@ -370,7 +423,7 @@ $ frac(d^2, d x^2)cos(x) = -cos(x) = 0 => frac(pi, 2) + pi n, n in ZZ $
 
 #block(above: 2em)[
   #figure(
-    image("assets/images/supply.png", width: 100%),
+    image("assets/state_machines/supply.png", width: 100%),
     caption: [Конечный автомат свежести `Supply`],
   )
 ]
@@ -379,26 +432,19 @@ $ frac(d^2, d x^2)cos(x) = -cos(x) = 0 => frac(pi, 2) + pi n, n in ZZ $
 
 == Результаты
 
-#source("assets/task3.result.txt", "text")
-
-Все тесты пройдены успешно. Неудачных тестов нет.
+#block(above: 2em)[
+  #figure(
+    image("assets/results/task3.png", width: 100%),
+    caption: [Результаты тестов для задания №3],
+  )
+]
 
 // ─────────────────────────── Заключение ───────────────────────────
 
 = Заключение
 
-В ходе лабораторной работы было реализовано и протестировано три программных модуля.
-Итоговая статистика:
-#table(
-  columns: (1fr, auto, auto, auto, auto),
-  stroke: 0.5pt,
-  align: (left, right, right, right, right),
-  fill: (_, row) => if row == 0 { luma(230) } else { none },
-  [*Подпроект*], [*Всего*], [*Пройдено*], [*Ошибок*], [*Пропущено*],
-  [task1 ($cos(x)$)], [29], [29], [0], [0],
-  [task2 (Binomial Heap)], [9], [9], [0], [0],
-  [task3 (Domain model)], [18], [18], [0], [0],
-  [*Итого*], [*56*], [*56*], [*0*], [*0*],
-)
+В ходе лабораторной работы было реализовано и протестировано три программных модуля при помощи различных методик тестирования:
+- Задание №1 - Метод "Анализ эквивалентности"
+- Задание №2 - Метод "Таблица решений"
+- Задание №3 - Метод "Таблица переходов"
 
-Все 56 тестов пройдены успешно, сбоев нет.
