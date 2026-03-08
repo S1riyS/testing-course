@@ -18,20 +18,13 @@ public class BinomialHeap {
     }
 
     private Node head;
-    private final TraversalTracer tracer;
-
-    private void trace(TracePoint point) {
-        if (tracer != null)
-            tracer.hit(point);
-    }
 
     public BinomialHeap() {
-        this(null);
+        this.head = null;
     }
 
-    public BinomialHeap(TraversalTracer tracer) {
-        this.head = null;
-        this.tracer = tracer;
+    Node getHead() {
+        return head;
     }
 
     public boolean isEmpty() {
@@ -39,16 +32,13 @@ public class BinomialHeap {
     }
 
     public void insert(int key) {
-        trace(TracePoint.INSERT);
         Node x = new Node(key);
-        // Wrap the new node in a temporary single-element heap and merge
-        BinomialHeap H = new BinomialHeap(tracer);
+        BinomialHeap H = new BinomialHeap();
         H.head = x;
         head = merge(head, H.head);
     }
 
     public int getMin() {
-        trace(TracePoint.GET_MIN);
         if (head == null)
             throw new NoSuchElementException("Heap is empty");
         Node min = findMinNode();
@@ -56,16 +46,13 @@ public class BinomialHeap {
     }
 
     public int extractMin() {
-        trace(TracePoint.EXTRACT_MIN);
         if (head == null)
             throw new NoSuchElementException("Heap is empty");
-
         Node min = findMinNode();
         head = removeFromList(head, min);
         if (min.child != null) {
-            // Children are stored in decreasing degree order; reverse to get increasing
             Node reversed = reverseList(min.child);
-            min.child = null; // detach before merge to avoid cycles
+            min.child = null;
             head = merge(head, reversed);
         }
 
@@ -99,7 +86,6 @@ public class BinomialHeap {
     }
 
     private Node merge(Node h1, Node h2) {
-        trace(TracePoint.MERGE);
         if (h1 == null)
             return h2;
         if (h2 == null)
@@ -108,14 +94,11 @@ public class BinomialHeap {
         return consolidate(merged);
     }
 
-    // Merges two root lists sorted by degree,
-    // without consolidation
     private Node mergeLists(Node x, Node y) {
         if (x == null)
             return y;
         if (y == null)
             return x;
-        trace(TracePoint.MERGE_LISTS);
         if (x.degree < y.degree) {
             x.sibling = mergeLists(x.sibling, y);
             return x;
@@ -124,22 +107,18 @@ public class BinomialHeap {
             y.sibling = mergeLists(x, y.sibling);
             return y;
         }
-        // Equal degrees: merge both pairs simultaneously, attach combined to the rest
         Node rest = mergeLists(x.sibling, y.sibling);
         Node combined = combineTrees(x, y);
         combined.sibling = rest;
         return combined;
     }
 
-    // Links two Bₖ trees into one B{k+1};
-    // The node with the smaller key becomes the root
     private Node combineTrees(Node a, Node b) {
         if (a.key > b.key) {
             Node t = a;
             a = b;
             b = t;
         }
-        // b becomes the leftmost child of a (prepend to child list)
         b.sibling = a.child;
         a.child = b;
         b.parent = a;
@@ -151,25 +130,21 @@ public class BinomialHeap {
         if (head == null || head.sibling == null)
             return head;
 
-        trace(TracePoint.CONSOLIDATE);
         Node prev = null;
         Node curr = head;
         Node next = curr.sibling;
         while (next != null) {
             boolean noDegreeConflict = curr.degree != next.degree;
-            // Three consecutive trees of the same degree: merge the latter pair first
             boolean hasTripleConflict = next.sibling != null && next.sibling.degree == curr.degree;
             if (noDegreeConflict || hasTripleConflict) {
                 prev = curr;
                 curr = next;
                 next = curr.sibling;
             } else if (curr.key <= next.key) {
-                // curr wins: absorb next into curr, keep curr in place
                 curr.sibling = next.sibling;
                 combineTrees(curr, next);
                 next = curr.sibling;
             } else {
-                // next wins: splice it before curr in the list, then absorb curr
                 if (prev == null)
                     head = next;
                 else
@@ -183,7 +158,6 @@ public class BinomialHeap {
     }
 
     private Node reverseList(Node first) {
-        trace(TracePoint.REVERSE);
         Node prev = null;
         Node curr = first;
         while (curr != null) {
