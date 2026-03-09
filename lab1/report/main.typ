@@ -260,7 +260,19 @@ $ frac(d^2, d x^2)cos(x) = 0 => -cos(x) = 0 => frac(pi, 2) + pi n, n in ZZ $
 
 Из текста выделены следующие сущности и их отношения:
 
-*\#TODO: insert UML diagram*
+#block(above: 2em)[
+  #figure(
+    image("assets/images/task3-classes-1.png", width: 100%),
+  )
+]
+
+#block(above: 2em)[
+  #figure(
+    image("assets/images/task3-classes-2.png", width: 100%),
+  )
+]
+
+#pagebreak()
 
 == Методика тестирования
 
