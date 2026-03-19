@@ -22,6 +22,43 @@
   raw(read(path), lang: lang, block: true),
 )
 
+#let render-test-data(csv-path) = {
+  let data = csv(csv-path, delimiter: ";")
+  let headers = data.first()
+  let boundary-col = headers.len() - 1
+  let columns-spec = headers.enumerate().map(((i, _)) => {
+    // колонка со значением функции обычно предпоследняя
+    if i == headers.len() - 2 { 1fr } else { auto }
+  })
+
+  table(
+    stroke: 0.5pt,
+    fill: (_, row) => if row == 0 { luma(230) } else { none },
+    columns: columns-spec,
+    // Set up header
+    table.header(..headers.map(h => [*#h*])),
+    ..data
+      .slice(1)
+      .map(row => {
+        row
+          .enumerate()
+          .map(((i, cell)) => {
+            if i == boundary-col {
+              // колонка is_boundary
+              if cell == "true" {
+                text(fill: green, sym.checkmark)
+              } else {
+                text(fill: red, sym.crossmark)
+              }
+            } else {
+              cell // остальные как есть
+            }
+          })
+      })
+      .flatten(),
+  )
+}
+
 // ─────────────────────────── Титульный лист ───────────────────────────
 
 #align(center)[
@@ -88,12 +125,12 @@
 Провести интеграционное тестирование программы, осуществляющей вычисление системы функций:
 
 #text(size: 11pt)[
-$
-  f(x) = cases(
-    csc(x) "if" x <= 0,
-    ((((log_5(x)^3) + log_5(x)) - log_3(x)) * ln(x)) - ((log_2(x) * (log_2(x) + ln(x))) / ((log_5(x) - (log_3(x)^2))^2)) "if" x > 0
-  )
-$
+  $
+    f(x) = cases(
+      csc(x) "if" x <= 0,
+      ((((log_5(x)^3) + log_5(x)) - log_3(x)) * ln(x)) - ((log_2(x) * (log_2(x) + ln(x))) / ((log_5(x) - (log_3(x)^2))^2)) "if" x > 0
+    )
+  $
 ]
 = Математическое обоснование
 
@@ -150,12 +187,161 @@ $ ln a = k dot ln 2 + 2 sum_(n=0)^N 1/(2n+1) ((m-1)/(m+1))^(2n+1) $
   - Все логарифмы требуют $x > 0$
   - Согласно #link(wolfram-url)[WolframAlpha], область допустимых значений:
 
-      $ D = {x in RR: x > 0, x != 1, x != e^frac(log^2(3), log^2(3)) } $
+    $ D = {x in RR: x > 0, x != 1, x != e^(log^2(3) div log(5)) } $
 
 = Архитектура приложения
 
+// TODO: insert UML diagram of classes
+
+= Модульное тестирование
+
+Прежде чем проводить интеграционное тестирование,
+необходимо убедится, что каждый элемент системы работает корректно в изоляции от остальных.
+
+== `Sine`
+
+=== Методика тестирования
+
+Тестирование проводится при помощи *анализа эквивалентности*.
+
+- Граничные значения:
+  + $x = 0 + 2pi n$
+  + $x = frac(pi, 2) + 2pi n$
+  + $x = pi + 2pi n$
+  + $x = frac(3pi, 2) + 2pi n$
+
+- Области эквивалентности:
+  + $(0; frac(pi, 2)) + 2pi n$
+  + $(frac(pi, 2); pi) + 2pi n$
+  + $(pi; frac(3pi, 2)) + 2pi n$
+  + $(frac(3pi, 2); 2pi) + 2pi n$
+
+#block(above: 2em)[
+  #figure(
+    image("assets/graphs/sin.png", width: 100%),
+    caption: [$sin(x)$],
+  )
+]
+
+#pagebreak()
+
+Тестовое покрытие:
+#render-test-data("test_resources/sin.csv")
+
+=== Результаты
+
+// TODO: insert screenshot
+
+#pagebreak()
+
+== `Cosecans`
+
+=== Методика тестирования
+
+Тестирование проводится при помощи *анализа эквивалентности*.
+
+- Граничные значения:
+  + $x = 0 + 2pi n$
+  + $x = frac(pi, 2) + 2pi n$
+  + $x = pi + 2pi n$
+  + $x = frac(3pi, 2) + 2pi n$
+
+- Области эквивалентности:
+  + $(0; frac(pi, 2)) + 2pi n$
+  + $(frac(pi, 2); pi) + 2pi n$
+  + $(pi; frac(3pi, 2)) + 2pi n$
+  + $(frac(3pi, 2); 2pi) + 2pi n$
+
+#block(above: 2em)[
+  #figure(
+    image("assets/graphs/csc.png", width: 100%),
+    caption: [$csc(x)$],
+  )
+]
+
+#pagebreak()
+
+Тестовое покрытие для числовых результатов:
+#render-test-data("test_resources/csc.csv")
+
+Тестовое покрытие для исключений:
+#table(
+  columns: (auto, 1fr, auto),
+  stroke: 0.5pt,
+  align: (left, left),
+  fill: (_, row) => if row == 0 { luma(230) } else { none },
+  [*x*], [*csc(x)*], [*is_boundary*],
+  [0], [`ArithmeticException`], text(fill: green, sym.checkmark),
+  [3.14159265], [`ArithmeticException`], text(fill: green, sym.checkmark),
+
+)
+
+=== Результаты
+
+#pagebreak()
+
+== `NaturalLogarithm`
+
+=== Методика тестирования
+
+Тестирование проводится при помощи *анализа эквивалентности*.
+
+- Граничные значения:
+  + $x = 0$ (граница области определения)
+  + $x = 1$ (значение функции $ln(1)=0$)
+
+- Области эквивалентности:
+  + $(-oo; 0]$ (не определён, ожидается исключение)
+  + $(0; 1)$
+  + $x = 1$
+  + $(1; +oo)$
+
+Тестовое покрытие для числовых результатов:
+#render-test-data("test_resources/ln.csv")
+
+Тестовое покрытие для исключений:
+#table(
+  columns: (auto, 1fr, auto),
+  stroke: 0.5pt,
+  align: (left, left),
+  fill: (_, row) => if row == 0 { luma(230) } else { none },
+  [*x*], [*ln(x)*], [*is_boundary*],
+  [0], [`ArithmeticException`], text(fill: green, sym.checkmark),
+  [-1], [`ArithmeticException`], text(fill: red, sym.crossmark),
+)
+
+#pagebreak()
+
+== `BaseNLogarithm`
+
+=== Методика тестирования
+
+Тестирование проводится при помощи *анализа эквивалентности*.
+
+- Граничные значения:
+  + $x = 0$ (граница области определения)
+  + $x = 1$ (значение функции $log_a(1)=0$)
+
+- Области эквивалентности:
+  + $(-oo; 0]$ (не определён, ожидается исключение)
+  + $(0; 1)$ (значение отрицательно)
+  + $x = 1$
+  + $(1; +oo)$ (значение положительно)
+
 = Результаты
-// TODO: complete
+Тестовое покрытие для числовых результатов:
+#render-test-data("test_resources/log_base_n.csv")
+
+Тестовое покрытие для исключений:
+#table(
+  columns: (auto, 1fr, auto),
+  stroke: 0.5pt,
+  align: (left, left),
+  fill: (_, row) => if row == 0 { luma(230) } else { none },
+  [*x*], [*log_a(x)*], [*is_boundary*],
+  [0], [`ArithmeticException`], text(fill: green, sym.checkmark),
+  [-1], [`ArithmeticException`], text(fill: red, sym.crossmark),
+)
 
 #pagebreak()
 

@@ -1,5 +1,10 @@
 plugins {
     java
+    application
+}
+
+application {
+    mainClass.set("testing.lab2.Main")
 }
 
 group = "testing.lab2"
@@ -25,4 +30,6 @@ tasks.test {
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.mockito:mockito-core:5.16.0")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.16.0")
 }
