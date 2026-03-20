@@ -23,6 +23,20 @@ public class EquationSystem extends AbstractMathFunction {
         this.log5 = new BaseNLogarithm(5, this.ln);
     }
 
+    public EquationSystem(
+            final Cosecant csc,
+            final NaturalLogarithm ln,
+            final BaseNLogarithm log2,
+            final BaseNLogarithm log3,
+            final BaseNLogarithm log5) {
+        super();
+        this.csc = csc;
+        this.ln = ln;
+        this.log2 = log2;
+        this.log3 = log3;
+        this.log5 = log5;
+    }
+
     @Override
     public double calculate(final double x, final double precision) {
         validatePrecision(precision);
@@ -32,7 +46,8 @@ public class EquationSystem extends AbstractMathFunction {
             return csc.calculate(x, precision);
         }
 
-        // x > 0 : (((((log_5(x) ^ 3) + log_5(x)) - log_3(x)) * ln(x)) - ((log_2(x) * (log_2(x) + ln(x))) / ((log_5(x) - (log_3(x) ^ 2)) ^ 2)))
+        // x > 0 : (((((log_5(x) ^ 3) + log_5(x)) - log_3(x)) * ln(x)) - ((log_2(x) *
+        // (log_2(x) + ln(x))) / ((log_5(x) - (log_3(x) ^ 2)) ^ 2)))
         final double lnx = ln.calculate(x, precision);
         final double log2x = log2.calculate(x, precision);
         final double log3x = log3.calculate(x, precision);
@@ -40,7 +55,7 @@ public class EquationSystem extends AbstractMathFunction {
 
         var lhs = ((Math.pow(log5x, 3) + log5x) - log3x) * lnx;
 
-        var numerator  = log2x * (log2x + lnx);
+        var numerator = log2x * (log2x + lnx);
         var denominator = Math.pow(log5x - Math.pow(log3x, 2), 2);
 
         if (Math.abs(denominator) < precision) {

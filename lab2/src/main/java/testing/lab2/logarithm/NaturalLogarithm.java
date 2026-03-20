@@ -15,7 +15,7 @@ public class NaturalLogarithm extends AbstractMathFunction {
         validatePrecision(precision);
 
         if (a <= 0.0) {
-            throw new ArithmeticException("Аргумент натурального логарифма должен быть меньше нуля");
+            throw new ArithmeticException("Аргумент натурального логарифма должен быть строго больше нуля");
         }
 
         double m = a;

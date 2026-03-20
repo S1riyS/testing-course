@@ -35,7 +35,8 @@ public class BaseNLogarithmTest {
     @ParameterizedTest(name = "log_10({0}) throws")
     @ValueSource(doubles = { 0.0, -1.0, -10.0 })
     void testLogBaseNDomainExceptions(double x) {
-        BaseNLogarithm logBaseN = new BaseNLogarithm(10, mockLn);
+        int base = 10;
+        BaseNLogarithm logBaseN = new BaseNLogarithm(base, mockLn);
         assertThrows(ArithmeticException.class, () -> logBaseN.calculate(x, PRECISION));
     }
 }

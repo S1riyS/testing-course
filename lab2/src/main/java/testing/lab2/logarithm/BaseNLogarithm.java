@@ -8,22 +8,18 @@ public class BaseNLogarithm extends AbstractMathFunction {
     private final NaturalLogarithm ln;
 
     public BaseNLogarithm() {
-        super();
-        this.base = 10;
-        this.ln = new NaturalLogarithm();
+        this(10.0, new NaturalLogarithm());
     }
 
     public BaseNLogarithm(final double base) {
-        super();
-        this.base = base;
-        this.ln = new NaturalLogarithm();
+        this(base, new NaturalLogarithm());
     }
 
-    public BaseNLogarithm(final int base, final NaturalLogarithm naturalLogarithm) {
+    public BaseNLogarithm(final double base, final NaturalLogarithm naturalLogarithm) {
         super();
         this.ln = naturalLogarithm;
         this.base = base;
-      }
+    }
 
     @Override
     public double calculate(final double x, final double precision) {
