@@ -1,4 +1,4 @@
-#set document(title: "ЛР1 Модульное тестирование")
+#set document(title: "ЛР2 Интеграционное тестирование")
 #set page(paper: "a4", margin: (top: 2cm, bottom: 2cm, left: 2cm, right: 2cm))
 
 #set text(lang: "ru", font: "Liberation Serif", size: 14pt)
@@ -26,10 +26,12 @@
   let data = csv(csv-path, delimiter: ";")
   let headers = data.first()
   let boundary-col = headers.len() - 1
-  let columns-spec = headers.enumerate().map(((i, _)) => {
-    // колонка со значением функции обычно предпоследняя
-    if i == headers.len() - 2 { 1fr } else { auto }
-  })
+  let columns-spec = headers
+    .enumerate()
+    .map(((i, _)) => {
+      // колонка со значением функции обычно предпоследняя
+      if i == headers.len() - 2 { 1fr } else { auto }
+    })
 
   table(
     stroke: 0.5pt,
@@ -187,11 +189,11 @@ $ ln a = k dot ln 2 + 2 sum_(n=0)^N 1/(2n+1) ((m-1)/(m+1))^(2n+1) $
   - Все логарифмы требуют $x > 0$
   - Согласно #link(wolfram-url)[WolframAlpha], область допустимых значений:
 
-    $ D = {x in RR: x > 0, x != 1, x != e^(log^2(3) div log(5)) } $
+    $ D = {x in RR: x > 0, x != 1, x != 3^(1 div log_3(5)) } $
 
 = Архитектура приложения
 
-// TODO: insert UML diagram of classes
+// TODO: UML HERE
 
 = Модульное тестирование
 
@@ -230,7 +232,12 @@ $ ln a = k dot ln 2 + 2 sum_(n=0)^N 1/(2n+1) ((m-1)/(m+1))^(2n+1) $
 
 === Результаты
 
-// TODO: insert screenshot
+#block(above: 2em)[
+  #figure(
+    image("assets/results/module/sin.png", width: 100%),
+    caption: [Результаты модульного теста для $sin(x)$],
+  )
+]
 
 #pagebreak()
 
@@ -273,10 +280,16 @@ $ ln a = k dot ln 2 + 2 sum_(n=0)^N 1/(2n+1) ((m-1)/(m+1))^(2n+1) $
   [*x*], [*csc(x)*], [*is_boundary*],
   [0], [`ArithmeticException`], text(fill: green, sym.checkmark),
   [3.14159265], [`ArithmeticException`], text(fill: green, sym.checkmark),
-
 )
 
 === Результаты
+
+#block(above: 2em)[
+  #figure(
+    image("assets/results/module/csc.png", width: 100%),
+    caption: [Результаты модульного теста для $csc(x)$],
+  )
+]
 
 #pagebreak()
 
@@ -288,13 +301,10 @@ $ ln a = k dot ln 2 + 2 sum_(n=0)^N 1/(2n+1) ((m-1)/(m+1))^(2n+1) $
 
 - Граничные значения:
   + $x = 0$ (граница области определения)
-  + $x = 1$ (значение функции $ln(1)=0$)
 
 - Области эквивалентности:
-  + $(-oo; 0]$ (не определён, ожидается исключение)
-  + $(0; 1)$
-  + $x = 1$
-  + $(1; +oo)$
+  + $(-oo; 0]$ (не определён)
+  + $(0; +oo)$
 
 Тестовое покрытие для числовых результатов:
 #render-test-data("test_resources/ln.csv")
@@ -310,6 +320,15 @@ $ ln a = k dot ln 2 + 2 sum_(n=0)^N 1/(2n+1) ((m-1)/(m+1))^(2n+1) $
   [-1], [`ArithmeticException`], text(fill: red, sym.crossmark),
 )
 
+=== Результаты
+
+#block(above: 2em)[
+  #figure(
+    image("assets/results/module/ln.png", width: 100%),
+    caption: [Результаты модульного теста для $ln(x)$],
+  )
+]
+
 #pagebreak()
 
 == `BaseNLogarithm`
@@ -320,15 +339,11 @@ $ ln a = k dot ln 2 + 2 sum_(n=0)^N 1/(2n+1) ((m-1)/(m+1))^(2n+1) $
 
 - Граничные значения:
   + $x = 0$ (граница области определения)
-  + $x = 1$ (значение функции $log_a(1)=0$)
 
 - Области эквивалентности:
-  + $(-oo; 0]$ (не определён, ожидается исключение)
-  + $(0; 1)$ (значение отрицательно)
-  + $x = 1$
-  + $(1; +oo)$ (значение положительно)
+  + $(-oo; 0]$ (не определён)
+  + $(0; +oo)$
 
-= Результаты
 Тестовое покрытие для числовых результатов:
 #render-test-data("test_resources/log_base_n.csv")
 
@@ -339,12 +354,139 @@ $ ln a = k dot ln 2 + 2 sum_(n=0)^N 1/(2n+1) ((m-1)/(m+1))^(2n+1) $
   align: (left, left),
   fill: (_, row) => if row == 0 { luma(230) } else { none },
   [*x*], [*log_a(x)*], [*is_boundary*],
-  [0], [`ArithmeticException`], text(fill: green, sym.checkmark),
-  [-1], [`ArithmeticException`], text(fill: red, sym.crossmark),
+  [$0$], [`ArithmeticException`], text(fill: green, sym.checkmark),
+  [$-1$], [`ArithmeticException`], text(fill: red, sym.crossmark),
 )
+
+=== Результаты
+
+#block(above: 2em)[
+  #figure(
+    image("assets/results/module/log_n.png", width: 100%),
+    caption: [Результаты модульного теста для $log_n(x)$],
+  )
+]
 
 #pagebreak()
 
-= Заключение
+== `EquationSystem`
 
-// TODO: complete
+=== Методика тестирования
+
+Тестирование проводится при помощи *анализа эквивалентности*.
+
+- Граничные значения:
+  + $x <= 0$: (Почти аналогично Cosecant)
+    + $x = 0 - 2pi n$
+    + $x = -frac(pi, 2) - 2pi n$
+    + $x = -pi - 2pi n$
+    + $x = -frac(3pi, 2) - 2pi n$
+  + $x = 1$ — знаменатель логарифмической части обращается в нуль
+  + $x = 3^(1 div log_3(5))$ — знаменатель логарифмической части обращается в нуль
+
+- Области эквивалентности:
+  + $x <= 0$: (Почти аналогично Cosecant)
+    + $(0; -frac(pi, 2)) - 2pi n$
+    + $(-frac(pi, 2); -pi) - 2pi n$
+    + $(-pi; -frac(3pi, 2)) - 2pi n$
+    + $(-frac(3pi, 2); -2pi) - 2pi n$
+
+  + $(0; 1)$
+  + $(1; 3^(1 div log_3(5)))$
+  + $(3^(1 div log_3(5)); +oo)$
+
+Тестовое покрытие для числовых результатов:
+
+#render-test-data("test_resources/equation_system.csv")
+
+Тестовое покрытие для исключений:
+
+#table(
+  columns: (auto, 1fr, auto),
+  stroke: 0.5pt,
+  fill: (_, row) => if row == 0 { luma(230) } else { none },
+  table.header([*x*], [*f(x)*], [*is_boundary*]),
+  [$0$], [`ArithmeticException` ($csc$ не определён)], text(fill: green, sym.checkmark),
+  [$-pi$], [`ArithmeticException` ($csc$ не определён)], text(fill: green, sym.checkmark),
+  [$1$], [`ArithmeticException` (знаменатель $= 0$)], text(fill: green, sym.checkmark),
+  [$3^(1 div log_3(5)$], [`ArithmeticException` (знаменатель $= 0$)], text(fill: green, sym.checkmark),
+)
+
+=== Результаты
+
+#block(above: 2em)[
+  #figure(
+    image("assets/results/module/system.png", width: 100%),
+    caption: [Результаты модульного теста для $f(x)$ (системы)],
+  )
+]
+
+#pagebreak()
+
+= Интеграционное тестирование
+
+Для интеграционного тестирования выбрана стратегия *Bottom-Up* (снизу вверх):
+
+*Интеграционные* тесты подключают реальные реализации зависимостей:
+
+#table(
+  columns: (auto, 1fr),
+  stroke: 0.5pt,
+  align: (left, left),
+  fill: (_, row) => if row == 0 { luma(230) } else { none },
+  [*Тест*], [*Зависимости*],
+  [`CosecantIntegrationTest`], [`Sine`],
+  [`BaseNLogarithmIntegrationTest`], [`NaturalLogarithm`],
+  [`EquationSystemIntegrationTest`],
+  [
+    - `Cosecant`
+    - `BaseNLogarithm`
+    - `NaturalLogarithm`
+  ],
+)
+
+=== Результаты
+
+#block(above: 2em)[
+  #figure(
+    image("assets/results/integration/csc.png", width: 100%),
+    caption: [Результаты интеграционного тестирования для $csc(x)$],
+  )
+]
+
+#block(above: 2em)[
+  #figure(
+    image("assets/results/integration/log_n.png", width: 100%),
+    caption: [Результаты интеграционного тестирования для $log_n(x)$],
+  )
+]
+
+#block(above: 2em)[
+  #figure(
+    image("assets/results/integration/system.png", width: 100%),
+    caption: [Результаты интеграционного тестирования для $f(x)$],
+  )
+]
+
+=== Графики из CSV.
+
+Действия:
+
++ Получение `CSV` файлов:
+
+  ```bash
+  ./gradlew run --args='--start=-5 --stop=5 --step=0.001 --functions=all'
+  ```
++ Построение графиков
+
+  ```bash
+  python visualizer/main.py output
+  ```
+
+
+#block(above: 2em)[
+  #figure(
+    image("assets/visualizer/all.png", width: 100%),
+    caption: [Визуализация графиков, построенныя на основе CSV файлов],
+  )
+]

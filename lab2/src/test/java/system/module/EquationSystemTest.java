@@ -22,6 +22,8 @@ public class EquationSystemTest {
     private static final double PRECISION = 1e-9;
     private static final double DELTA = 1e-6;
 
+    private static final double ZERO_DENOMINATOR_VALUE = Math.pow(3, 1 / (Math.log(5) / Math.log(3)));
+
     @Mock
     private Cosecant mockCsc;
     @Mock
@@ -51,7 +53,7 @@ public class EquationSystemTest {
     }
 
     @ParameterizedTest(name = "f({0}) throws (zero denominator)")
-    @ValueSource(doubles = { 1.0 })
+    @ValueSource(doubles = { 1.0, 2.116829718397169 })
     void testZeroDenominatorExceptions(double x) {
         setupMocks(x);
         EquationSystem system = new EquationSystem(mockCsc, mockLn, mockLog2, mockLog3, mockLog5);
