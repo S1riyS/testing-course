@@ -17,9 +17,6 @@ public class AskPage extends Page {
         PageFactory.initElements(driver, this);
     }
 
-    @FindBy(xpath = "//div[2]/ul/li/a")
-    private WebElement questionInset;
-
     @FindBy(xpath = "//*[@id='app']/div[2]/div/main/div/div/div/div/div[3]/form/div[3]/div/div/div[3]/div[1]/button")
     private WebElement pollInset;
 
@@ -43,20 +40,8 @@ public class AskPage extends Page {
     @FindBy(xpath = "//span[contains(normalize-space(), 'Программирование')]")
     private WebElement programmingSpaceOption;
 
-    @FindBy(xpath = "//div[@name='select_childs_categories']")
-    private WebElement subCategoryDropdown;
-
-    @FindBy(xpath = "//div[15]/div/span")
-    private WebElement otherTechnologiesOption;
-
     @FindBy(xpath = "//button[contains(normalize-space(), 'Опубликовать')]")
     private WebElement questionPublicationButton;
-
-    @FindBy(css = ".Z6xu6:nth-child(2) svg")
-    private WebElement getMessageCheckbox;
-
-    @FindBy(css = ".Z6xu6:nth-child(1) svg")
-    private WebElement allowCommentsCheckbox;
 
     @FindBy(xpath = "//*[@id='app']/div[2]/div/main/div/div/div/div/div[4]/div/button")
     private WebElement addPollOptionButton;

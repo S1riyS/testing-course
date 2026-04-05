@@ -25,9 +25,4 @@ public class SearchPage extends Page {
         WebElement link = wait.until(ExpectedConditions.elementToBeClickable(FIRST_QUESTION_LINK));
         link.click();
     }
-
-    public void clickFirstSearchResult() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));
-        wait.until(ExpectedConditions.elementToBeClickable(FIRST_QUESTION_LINK)).click();
-    }
 }

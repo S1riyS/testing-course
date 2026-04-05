@@ -1,12 +1,9 @@
 package testing.lab3.pages;
 
-import java.time.Duration;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class HomePage extends Page {
 
@@ -79,9 +76,6 @@ public class HomePage extends Page {
     @FindBy(xpath = "//div[@id='root']//form//div[2]//div//div//div//div//div//div//div//div//div//div[2]//div[7]//div//div//input")
     private WebElement secondNumber;
 
-    @FindBy(xpath = "//div[@id='root']//form//div[2]//div//div//div//div//div//div//div//div//span//input")
-    private WebElement codeInput;
-
     @FindBy(xpath = "//div[@id='root']//form//div[2]//div//div[2]//div//button")
     private WebElement submitEnterButton;
 
@@ -93,14 +87,6 @@ public class HomePage extends Page {
     /** Кнопка запуска поиска рядом с полем */
     @FindBy(xpath = "//input[contains(@placeholder, 'поиск')]/following::button[1]")
     private WebElement magnifierButton;
-
-    // --- Feed tabs ---
-
-    @FindBy(xpath = "//button[contains(., 'Новое')]")
-    private WebElement newTabButton;
-
-    @FindBy(xpath = "//button[contains(., 'Все ранги')]")
-    private WebElement allRanksTabButton;
 
     // --- Feed content ---
 
@@ -114,11 +100,6 @@ public class HomePage extends Page {
 
     @FindBy(xpath = "//span[contains(., 'Выйти')] | //button[contains(., 'Выйти')]")
     private WebElement exitButton;
-
-    // --- Heading ---
-
-    @FindBy(xpath = "//h1")
-    private WebElement heading;
 
     // --- Spaces sidebar links ---
 
@@ -187,7 +168,6 @@ public class HomePage extends Page {
         searchInput.clear();
         searchInput.sendKeys(query);
         magnifierButton.click();
-        new WebDriverWait(driver, Duration.ofSeconds(1));
     }
 
     public void searchInvalidQuestion() {
@@ -195,14 +175,6 @@ public class HomePage extends Page {
         searchInput.clear();
         searchInput.sendKeys("\t");
         magnifierButton.click();
-    }
-
-    public void clickNewTab() {
-        newTabButton.click();
-    }
-
-    public void clickAllRanksTab() {
-        allRanksTabButton.click();
     }
 
     public void clickFirstQuestion() {
@@ -246,13 +218,5 @@ public class HomePage extends Page {
 
     public void clickFirstProfileLink() {
         firstProfileLink.click();
-    }
-
-    public String getHeadingText() {
-        return heading.getText();
-    }
-
-    public boolean isSearchInputDisplayed() {
-        return searchInput.isDisplayed();
     }
 }

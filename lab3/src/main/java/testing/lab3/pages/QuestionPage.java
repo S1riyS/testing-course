@@ -33,10 +33,6 @@ public class QuestionPage extends Page {
         sendAnswerButton.click();
     }
 
-    public String getQuestionTitle() {
-        return questionTitle.getText();
-    }
-
     public boolean isQuestionTitleDisplayed() {
         return questionTitle.isDisplayed();
     }
