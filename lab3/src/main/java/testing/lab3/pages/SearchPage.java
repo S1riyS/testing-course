@@ -6,12 +6,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-
 public class SearchPage extends Page {
 
-    public SearchPage(WebDriver driver) {
+    private final WebDriverWait wait;
+
+    public SearchPage(WebDriver driver, WebDriverWait wait) {
         super(driver);
+        this.wait = wait;
     }
 
     private static final By FIRST_QUESTION_LINK =
@@ -21,7 +22,6 @@ public class SearchPage extends Page {
      * После выдачи поиска открывает первый вопрос из результатов.
      */
     public void chooseQuestion() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));
         WebElement link = wait.until(ExpectedConditions.elementToBeClickable(FIRST_QUESTION_LINK));
         link.click();
     }
