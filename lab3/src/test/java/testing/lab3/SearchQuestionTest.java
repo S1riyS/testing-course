@@ -5,16 +5,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import testing.lab3.pages.HomePage;
 import testing.lab3.pages.SearchPage;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SearchQuestionTest {
 
     private Utils utils;
     private WebDriver driver;
+    private WebDriverWait wait;
     private JavascriptExecutor js;
     private HomePage homePage;
     private SearchPage searchPage;
@@ -24,9 +26,10 @@ public class SearchQuestionTest {
         utils = new Utils();
         utils.setupDriver();
         driver = utils.getDriver();
+        wait = utils.getWait();
         js = utils.getJs();
         homePage = new HomePage(driver);
-        searchPage = new SearchPage(driver);
+        searchPage = new SearchPage(driver, wait);
     }
 
     @AfterEach
@@ -45,7 +48,7 @@ public class SearchQuestionTest {
     @Test
     public void searchInvalidQuestionTest() {
         homePage.searchInvalidQuestion();
-        assertFalse(driver.getCurrentUrl().contains("/search"));
+        wait.until(ExpectedConditions.not(ExpectedConditions.urlContains("/search")));
     }
 
     @Test
@@ -53,6 +56,6 @@ public class SearchQuestionTest {
         homePage.searchQuestion("Программирование Java");
         js.executeScript("window.scrollBy(0, 500)");
         js.executeScript("window.scrollBy(0, -250)");
-        assertTrue(driver.getCurrentUrl().contains("search"));
+        wait.until(ExpectedConditions.urlContains("search"));
     }
 }

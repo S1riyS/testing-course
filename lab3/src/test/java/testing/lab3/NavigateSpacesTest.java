@@ -1,13 +1,12 @@
 package testing.lab3;
 
-import java.time.Duration;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import testing.lab3.pages.HomePage;
 import testing.lab3.pages.SpacePage;
 
@@ -16,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class NavigateSpacesTest {
 
     private WebDriver driver;
+    private WebDriverWait wait;
     private HomePage homePage;
     private SpacePage spacePage;
 
@@ -24,6 +24,7 @@ public class NavigateSpacesTest {
         Utils utils = new Utils();
         utils.setupDriver();
         driver = utils.getDriver();
+        wait = utils.getWait();
         homePage = new HomePage(driver);
         spacePage = new SpacePage(driver);
     }
@@ -58,7 +59,6 @@ public class NavigateSpacesTest {
         homePage.clickSpacesLink();
 
         // Wait for the URL to contain "/spaces"
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.urlContains("/spaces"));
+        wait.until(ExpectedConditions.urlContains("/spaces"));
     }
 }

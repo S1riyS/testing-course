@@ -1,7 +1,6 @@
 package testing.lab3;
 
 import java.net.URI;
-import java.time.Duration;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import testing.lab3.pages.HomePage;
 import testing.lab3.pages.ProfilePage;
 
@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ProfileTest {
 
     private WebDriver driver;
+    private WebDriverWait wait;
     private HomePage homePage;
     private ProfilePage profilePage;
 
@@ -26,6 +27,7 @@ public class ProfileTest {
         Utils utils = new Utils();
         utils.setupDriver();
         driver = utils.getDriver();
+        wait = utils.getWait();
         homePage = new HomePage(driver);
         profilePage = new ProfilePage(driver);
     }
@@ -40,8 +42,7 @@ public class ProfileTest {
     @Test
     public void viewProfileTest() {
         homePage.clickFirstProfileLink();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.urlContains("/profile/"));
+        wait.until(ExpectedConditions.urlContains("/profile/"));
 
         // Name matches URL
         String usernameFromUrl = usernameFromProfileUrl(driver.getCurrentUrl());

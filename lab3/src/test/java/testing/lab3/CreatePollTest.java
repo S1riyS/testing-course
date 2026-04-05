@@ -9,12 +9,12 @@ import testing.lab3.pages.AskPage;
 import testing.lab3.pages.HomePage;
 
 import java.io.IOException;
-import java.time.Duration;
 
 public class CreatePollTest {
 
     private static Utils utils;
     private static WebDriver driver;
+    private static WebDriverWait wait;
     private static HomePage homePage;
     private static AskPage askPage;
     private static AuthCookieConfig authCookieConfig;
@@ -24,6 +24,7 @@ public class CreatePollTest {
         utils = new Utils();
         utils.setupDriver();
         driver = utils.getDriver();
+        wait = utils.getWait();
         homePage = new HomePage(driver);
         askPage = new AskPage(driver);
 
@@ -41,11 +42,9 @@ public class CreatePollTest {
     @Test
     public void createPollTest() {
         homePage.clickAskButton();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.urlContains("/ask"));
+        wait.until(ExpectedConditions.urlContains("/ask"));
 
         askPage.createPoll();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.urlToBe("https://otvet.mail.ru/"));
+        wait.until(ExpectedConditions.urlToBe("https://otvet.mail.ru/"));
     }
 }

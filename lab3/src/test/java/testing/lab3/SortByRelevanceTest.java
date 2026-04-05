@@ -4,6 +4,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import testing.lab3.pages.HomePage;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -11,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class SortByRelevanceTest {
 
     private WebDriver driver;
+    private WebDriverWait wait;
     private HomePage homePage;
 
     @BeforeEach
@@ -18,6 +22,7 @@ public class SortByRelevanceTest {
         Utils utils = new Utils();
         utils.setupDriver();
         driver = utils.getDriver();
+        wait = utils.getWait();
         homePage = new HomePage(driver);
     }
 
@@ -32,13 +37,13 @@ public class SortByRelevanceTest {
     public void sortByPopularTest() {
         homePage.sortByRelevance("popular");
         assertTrue(homePage.getRelevanceSortButtonText().contains("Популярное"));
-        assertTrue(driver.getCurrentUrl().contains("/popular"));
+        wait.until(ExpectedConditions.urlContains("/popular"));
     }
 
     @Test
     public void sortByDebatedTest() {
         homePage.sortByRelevance("debated");
         assertTrue(homePage.getRelevanceSortButtonText().contains("Обсуждаемое"));
-        assertTrue(driver.getCurrentUrl().contains("/debated"));
+        wait.until(ExpectedConditions.urlContains("/debated"));
     }
 }

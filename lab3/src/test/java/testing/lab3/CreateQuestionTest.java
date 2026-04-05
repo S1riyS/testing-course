@@ -11,12 +11,12 @@ import testing.lab3.pages.HomePage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
-import java.time.Duration;
 
 public class CreateQuestionTest {
 
     private static Utils utils;
     private static WebDriver driver;
+    private static WebDriverWait wait;
     private static HomePage homePage;
     private static AskPage askPage;
     private static AuthCookieConfig authCookieConfig;
@@ -26,6 +26,7 @@ public class CreateQuestionTest {
         utils = new Utils();
         utils.setupDriver();
         driver = utils.getDriver();
+        wait = utils.getWait();
         homePage = new HomePage(driver);
         askPage = new AskPage(driver);
 
@@ -44,20 +45,17 @@ public class CreateQuestionTest {
     @Order(1)
     public void createQuestionTest() {
         homePage.clickAskButton();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.urlContains("/ask"));
+        wait.until(ExpectedConditions.urlContains("/ask"));
 
         askPage.createQuestion();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.urlToBe("https://otvet.mail.ru/"));
+        wait.until(ExpectedConditions.urlToBe("https://otvet.mail.ru/"));
     }
 
     @Test
     @Order(2)
     public void createInvalidQuestionTest() {
         homePage.clickAskButton();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.urlContains("/ask"));
+        wait.until(ExpectedConditions.urlContains("/ask"));
 
         askPage.createInvalidQuestion();
 
@@ -65,8 +63,7 @@ public class CreateQuestionTest {
         assertEquals(true, askPage.isPublicationButtonEnabled());
 
         // After clicking on "Publish" we sould stay on the same page
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.urlContains("/ask"));
+        wait.until(ExpectedConditions.urlContains("/ask"));
 
     }
 }
