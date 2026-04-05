@@ -11,6 +11,8 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.Map;
 
 public class Utils {
 
@@ -40,6 +42,12 @@ public class Utils {
             }
             options.setBinary(chromeBinary);
             driver = new ChromeDriver(options);
+
+            // Block ADs
+            ((ChromeDriver) driver).executeCdpCommand("Network.enable", Map.of());
+            ((ChromeDriver) driver).executeCdpCommand(
+                    "Network.setBlockedURLs",
+                    Map.of("urls", List.of("*://ad.mail.ru/*")));
         }
 
         wait = new WebDriverWait(driver, Duration.ofSeconds(25));
