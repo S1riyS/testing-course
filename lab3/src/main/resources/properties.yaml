@@ -1,0 +1,5 @@
+# Cookie used for authenticated UI tests. Set the real value via the env var below (never commit secrets).
+cookieName: "Auth-Token"
+cookieDomain: "otvet.mail.ru"
+cookiePath: "/"
+tokenEnvVar: "OTVET_SESSION_TOKEN"

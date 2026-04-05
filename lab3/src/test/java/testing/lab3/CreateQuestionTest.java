@@ -1,0 +1,72 @@
+package testing.lab3;
+
+import org.junit.jupiter.api.*;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import testing.lab3.pages.AskPage;
+import testing.lab3.pages.HomePage;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.IOException;
+import java.time.Duration;
+
+public class CreateQuestionTest {
+
+    private static Utils utils;
+    private static WebDriver driver;
+    private static HomePage homePage;
+    private static AskPage askPage;
+    private static AuthCookieConfig authCookieConfig;
+
+    @BeforeAll
+    public static void setUp() throws IOException {
+        utils = new Utils();
+        utils.setupDriver();
+        driver = utils.getDriver();
+        homePage = new HomePage(driver);
+        askPage = new AskPage(driver);
+
+        authCookieConfig = AuthCookieConfig.load();
+        authCookieConfig.applySessionCookie(driver);
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        if (utils != null) {
+            utils.quitDriver();
+        }
+    }
+
+    @Test
+    @Order(1)
+    public void createQuestionTest() {
+        homePage.clickAskButton();
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.urlContains("/ask"));
+
+        askPage.createQuestion();
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.urlToBe("https://otvet.mail.ru/"));
+    }
+
+    @Test
+    @Order(2)
+    public void createInvalidQuestionTest() {
+        homePage.clickAskButton();
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.urlContains("/ask"));
+
+        askPage.createInvalidQuestion();
+
+        // Even though question is invalid "Publish" button is enabled
+        assertEquals(true, askPage.isPublicationButtonEnabled());
+
+        // After clicking on "Publish" we sould stay on the same page
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.urlContains("/ask"));
+
+    }
+}
