@@ -14,7 +14,7 @@ public class HomePage extends Page {
 
     // --- Navigation ---
 
-    /** Ссылка «Спросить» / форма вопроса или кнопка «Создать» в нижней навигации */
+    /** Ссылка «Создать» / форма вопроса или кнопка «Создать» в нижней навигации */
     @FindBy(xpath = "//a[contains(@href, '/ask')] | //button[contains(., 'Создать')]")
     private WebElement askButton;
 

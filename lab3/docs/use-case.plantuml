@@ -1,0 +1,80 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+
+skinparam nodesep 50
+skinparam ranksep 70
+skinparam usecase {
+  BackgroundColor #f0f8ff
+  BorderColor #333
+  FontSize 14
+}
+
+actor "Гость" as Guest <<Person>>
+actor "Авторизованный\nпользователь" as AuthUser <<Person>>
+
+rectangle "Система otvet.mail.ru" {
+  usecase (UC-01 Авторизация / Выход) as UC1
+  usecase (UC-02 Навигация по Spaces) as UC2
+  usecase (UC-03 Поиск вопросов) as UC3
+  usecase (UC-04 Создание вопроса) as UC4
+  usecase (UC-05 Создание опроса) as UC5
+  usecase (UC-06 Взаимодействие с вопросом) as UC6
+  usecase (UC-07 Фильтрация ленты) as UC7
+  usecase (UC-08 Просмотр профиля) as UC8
+
+  UC1 .> UC4 : <<include>>
+  UC1 .> UC5 : <<include>>
+  UC1 .> UC6 : <<include>>
+}
+
+Guest --> UC2
+Guest --> UC3
+Guest --> UC7
+Guest --> UC8
+
+AuthUser --> UC1
+AuthUser --> UC2
+AuthUser --> UC3
+AuthUser --> UC4
+AuthUser --> UC5
+AuthUser --> UC6
+AuthUser --> UC7
+AuthUser --> UC8
+
+note top of UC2
+  <b>Проверяемые пространства:</b>
+  ──────────────────────
+  Программирование
+  Наука
+  Бизнес
+  Проблемы с ПК
+  Бабочки в животе
+  А сейчас что-то совсем другое
+  (и другие)
+end note
+
+note bottom of UC5
+  <b>Параметры опроса:</b>
+  1. 4 варианта ответа
+  2. Множественный выбор
+  3. Настройки комментариев
+  4. Уведомления
+end note
+
+note right of UC1
+  <b>Обязателен для:</b>
+  • Создания контента
+  • Ответов на вопросы
+  • Комментирования
+end note
+
+note bottom of UC3
+  <b>Возможности поиска:</b>
+  • По ключевым словам
+  • Расширенный (категория,
+    время, тип вопроса)
+  • Только в вопросах
+end note
+
+@enduml

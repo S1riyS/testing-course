@@ -11,7 +11,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import testing.lab3.pages.HomePage;
 import testing.lab3.pages.SearchPage;
 
-
 public class SearchQuestionTest {
 
     private Utils utils;
@@ -41,7 +40,7 @@ public class SearchQuestionTest {
 
     @Test
     public void searchQuestionTest() {
-        homePage.searchQuestion("Тортик рецепты");
+        homePage.searchQuestion("Тестирование UI");
         searchPage.chooseQuestion();
     }
 
@@ -53,7 +52,7 @@ public class SearchQuestionTest {
 
     @Test
     public void searchAndScrollTest() {
-        homePage.searchQuestion("Программирование Java");
+        homePage.searchQuestion("Программирование Golang");
         js.executeScript("window.scrollBy(0, 500)");
         js.executeScript("window.scrollBy(0, -250)");
         wait.until(ExpectedConditions.urlContains("search"));
