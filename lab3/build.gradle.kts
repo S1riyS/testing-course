@@ -35,7 +35,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    testImplementation("io.qameta.allure:allure-junit5:2.29.1")
     runtimeOnly("org.aspectj:aspectjweaver:1.9.24")
 
     testImplementation("org.hamcrest:hamcrest:2.2")
