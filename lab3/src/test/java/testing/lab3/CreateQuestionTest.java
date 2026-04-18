@@ -9,6 +9,7 @@ import testing.lab3.pages.AskPage;
 import testing.lab3.pages.HomePage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 
@@ -21,8 +22,8 @@ public class CreateQuestionTest {
     private static AskPage askPage;
     private static AuthCookieConfig authCookieConfig;
 
-    @BeforeAll
-    public static void setUp() throws IOException {
+    @BeforeEach
+    public void setUp() throws IOException {
         utils = new Utils();
         utils.setupDriver();
         driver = utils.getDriver();
@@ -34,36 +35,32 @@ public class CreateQuestionTest {
         authCookieConfig.applySessionCookie(driver);
     }
 
-    @AfterAll
-    public static void tearDown() {
-        if (utils != null) {
-            utils.quitDriver();
+    @AfterEach
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
         }
     }
 
     @Test
-    @Order(1)
     public void createQuestionTest() {
         homePage.clickAskButton();
         wait.until(ExpectedConditions.urlContains("/ask"));
 
-        askPage.createQuestion();
+        String title = askPage.createQuestion();
+
         wait.until(ExpectedConditions.urlToBe("https://otvet.mail.ru/"));
+        assertEquals(title, homePage.getFirstQuestionTitleText());
     }
 
     @Test
-    @Order(2)
     public void createInvalidQuestionTest() {
         homePage.clickAskButton();
         wait.until(ExpectedConditions.urlContains("/ask"));
 
         askPage.createInvalidQuestion();
 
-        // Even though question is invalid "Publish" button is enabled
-        assertEquals(true, askPage.isPublicationButtonEnabled());
-
-        // After clicking on "Publish" we sould stay on the same page
-        wait.until(ExpectedConditions.urlContains("/ask"));
-
+        wait.until(ExpectedConditions.visibilityOf(askPage.getInvalidQuestionMessag()));
+        assertTrue(askPage.isInvalidQuestionMessageDisplayed());
     }
 }

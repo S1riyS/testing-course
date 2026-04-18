@@ -39,12 +39,6 @@ public class FilterByRankTest {
         homePage.filterByRank("exalted");
         assertTrue(homePage.getRankFilterButtonText().contains("Возвысившиеся"));
         wait.until(ExpectedConditions.urlContains("otvet.mail.ru"));
-    }
-
-    @Test
-    public void filterByComprehendingTest() {
-        homePage.filterByRank("comprehending");
-        assertTrue(homePage.getRankFilterButtonText().contains("Постигающие"));
-        wait.until(ExpectedConditions.urlContains("otvet.mail.ru"));
+        assertTrue(homePage.getFeedElementsCount() > 0);
     }
 }

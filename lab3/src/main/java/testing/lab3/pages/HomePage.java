@@ -1,5 +1,7 @@
 package testing.lab3.pages;
 
+import java.util.List;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -14,20 +16,18 @@ public class HomePage extends Page {
 
     // --- Navigation ---
 
-    /** Ссылка «Создать» / форма вопроса или кнопка «Создать» в нижней навигации */
     @FindBy(xpath = "//a[contains(@href, '/ask')] | //button[contains(., 'Создать')]")
     private WebElement askButton;
 
     @FindBy(xpath = "//a[contains(@href, '/spaces')]")
     private WebElement spacesLink;
 
-    /** Кнопка «Войти» в шапке (актуальная вёрстка без ph-whiteline) */
     @FindBy(xpath = "//button[contains(normalize-space(), 'Войти')]")
     private WebElement enterButton;
 
     // --- Sort by relevance elements ---
 
-    @FindBy(xpath = "//*[@id='app']/div[2]/div[2]/main/div/div[2]/div[1]/div[1]")
+    @FindBy(xpath = "//div[@role='button' and descendant::span[contains(text(),'Новое')]]")
     private WebElement relevanceButton;
 
     @FindBy(xpath = "//span[contains(., 'Популярному')]")
@@ -36,7 +36,7 @@ public class HomePage extends Page {
     @FindBy(xpath = "//span[contains(., 'Обсуждаемому')]")
     private WebElement relevanceDebatedButton;
 
-    @FindBy(xpath = "//*[@id='app']/div[2]/div[2]/main/div/div[2]/div[1]/div[1]/span[1]")
+    @FindBy(xpath = "//div[@role='button']//span")
     private WebElement relevanceButtonText;
 
     // --- Filter by rank elements ---
@@ -53,45 +53,24 @@ public class HomePage extends Page {
     @FindBy(xpath = "//*[@id='app']/div[2]/div[2]/main/div/div[2]/div[1]/div[2]/span[1]")
     private WebElement rankFilterButtonText;
 
-    // --- Auth iframe elements (форма Mail.ru в iframe) ---
-
-    @FindBy(xpath = "//input[@name='username']")
-    private WebElement accountNameInput;
-
-    @FindBy(xpath = "//div[@data-test-id='error-footer-text']//small[@data-test-id='required']")
-    private WebElement accountNameError;
-
-    @FindBy(xpath = "//div[@id='root']//form//div[2]//div[2]//div//div//div//div//div//div//div[3]//div//div//div//div")
-    private WebElement mailChoseDropdown;
-
-    @FindBy(xpath = "//div[@id='react-select-2-option-0']//div//div//div[2]//span")
-    private WebElement secondDropdownOption;
-
-    @FindBy(xpath = "//div[@id='root']//form//button")
-    private WebElement enterModelPageButton;
-
-    @FindBy(xpath = "//div[@id='root']//form//div[2]//div//div//div//div//div//div//div//div//div//div[2]//div[6]//div//div//input")
-    private WebElement firstNumber;
-
-    @FindBy(xpath = "//div[@id='root']//form//div[2]//div//div//div//div//div//div//div//div//div//div[2]//div[7]//div//div//input")
-    private WebElement secondNumber;
-
-    @FindBy(xpath = "//div[@id='root']//form//div[2]//div//div[2]//div//button")
-    private WebElement submitEnterButton;
-
     // --- Search (placeholder «Призвать силу поиска…») ---
 
     @FindBy(xpath = "//input[contains(@placeholder, 'поиск') or contains(@placeholder, 'Поиск')]")
     private WebElement searchInput;
 
-    /** Кнопка запуска поиска рядом с полем */
     @FindBy(xpath = "//input[contains(@placeholder, 'поиск')]/following::button[1]")
     private WebElement magnifierButton;
 
     // --- Feed content ---
 
+    @FindBy(xpath = "//div[contains(@class, 'vkuiInternalCardGrid') and .//div[@role='link']]/*")
+    private List<WebElement> feedElements;
+
     @FindBy(xpath = "(//a[contains(@href, '/question/')])[1]")
     private WebElement firstQuestionInFeed;
+
+    @FindBy(xpath = "(//span[contains(concat(' ', normalize-space(@class), ' '), ' _PostTitle')])[1]")
+    private WebElement firstQuestionTitle;
 
     // --- User menu / logout ---
 
@@ -121,29 +100,6 @@ public class HomePage extends Page {
 
     public void clickEnterButton() {
         enterButton.click();
-    }
-
-    public void enterLoginAndChooseMailType(String login) {
-        mailChoseDropdown.click();
-        secondDropdownOption.click();
-        accountNameInput.sendKeys(login);
-        enterModelPageButton.click();
-    }
-
-    public void enterNumbersAndCode(String first, String second) {
-        firstNumber.click();
-        firstNumber.sendKeys(first);
-        secondNumber.click();
-        secondNumber.sendKeys(second);
-    }
-
-    public void submitLogin() {
-        submitEnterButton.click();
-        driver.switchTo().defaultContent();
-    }
-
-    public boolean isAccountErrorDisplayed() {
-        return accountNameError.isDisplayed();
     }
 
     public void logout() {
@@ -219,4 +175,15 @@ public class HomePage extends Page {
     public void clickFirstProfileLink() {
         firstProfileLink.click();
     }
+
+    public String getFirstQuestionTitleText() {
+        return firstQuestionTitle.getText();
+    }
+
+    public Integer getFeedElementsCount() {
+        return feedElements.size();
+    }
 }
+
+// *[@id="app"]/div[2]/div[2]/main/div/div[4]
+// *[@id="app"]/div[2]/div[3]/main/div/div[4]

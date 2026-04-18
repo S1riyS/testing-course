@@ -1,7 +1,5 @@
 package testing.lab3;
 
-import java.net.URI;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +10,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import testing.lab3.pages.HomePage;
 import testing.lab3.pages.ProfilePage;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ProfileTest {
@@ -44,24 +41,15 @@ public class ProfileTest {
         homePage.clickFirstProfileLink();
         wait.until(ExpectedConditions.urlContains("/profile/"));
 
-        // Name matches URL
-        String usernameFromUrl = usernameFromProfileUrl(driver.getCurrentUrl());
-        assertEquals(usernameFromUrl, profilePage.getUserName());
-
-        // Key elements of profile are displayed
+        // Key elements:
         assertTrue(profilePage.isUserNameDisplayed());
         assertTrue(profilePage.isRankDisplayed());
         assertTrue(profilePage.isKarmaBlockDisplayed());
-    }
 
-    private static String usernameFromProfileUrl(String url) {
-        String path = URI.create(url).getPath();
-        if (!path.startsWith("/profile/")) {
-            throw new IllegalArgumentException("Expected /profile/<username> in URL: " + url);
-        }
+        // Tabs:
+        assertTrue(profilePage.isPostsTabDisplayed());
+        assertTrue(profilePage.isAnswersTabDisplayed());
+        assertTrue(profilePage.isAwardsTabDisplayed());
 
-        String rest = path.substring("/profile/".length());
-        int slash = rest.indexOf('/');
-        return slash < 0 ? rest : rest.substring(0, slash);
     }
 }

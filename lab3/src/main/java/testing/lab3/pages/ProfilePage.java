@@ -21,6 +21,15 @@ public class ProfilePage extends Page {
     @FindBy(xpath = "//*[@id='app']/div[2]/div[2]/main/div/div[2]/div/div[2]/div[2]/div[1]/div/div[2]/div[1]/div")
     private WebElement karmaBlock;
 
+    @FindBy(xpath = "//a[contains(., 'Посты')]")
+    private WebElement postsTab;
+
+    @FindBy(xpath = "//a[contains(., 'Ответы')]")
+    private WebElement answersTab;
+
+    @FindBy(xpath = "//a[contains(., 'Награды')]")
+    private WebElement awardsTab;
+
     public boolean isUserNameDisplayed() {
         return userName.isDisplayed();
     }
@@ -35,5 +44,17 @@ public class ProfilePage extends Page {
 
     public boolean isKarmaBlockDisplayed() {
         return karmaBlock.isDisplayed();
+    }
+
+    public boolean isPostsTabDisplayed() {
+        return postsTab.isDisplayed();
+    }
+
+    public boolean isAnswersTabDisplayed() {
+        return answersTab.isDisplayed();
+    }
+
+    public boolean isAwardsTabDisplayed() {
+        return awardsTab.isDisplayed();
     }
 }

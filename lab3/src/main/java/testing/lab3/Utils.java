@@ -16,6 +16,9 @@ import java.util.Map;
 
 public class Utils {
 
+    private static final Integer DEFAULT_VIEWPORT_WIDTH = 1280;
+    private static final Integer DEFAULT_VIEWPORT_HEIGHT = 800;
+
     private WebDriver driver;
     private WebDriverWait wait;
     private JavascriptExecutor js;
@@ -53,7 +56,9 @@ public class Utils {
         wait = new WebDriverWait(driver, Duration.ofSeconds(25));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
-        driver.manage().window().setSize(new Dimension(1280, 800));
+
+        // Set default size of window
+        driver.manage().window().setSize(new Dimension(DEFAULT_VIEWPORT_WIDTH, DEFAULT_VIEWPORT_HEIGHT));
 
         js = (JavascriptExecutor) driver;
         driver.get("https://otvet.mail.ru/");

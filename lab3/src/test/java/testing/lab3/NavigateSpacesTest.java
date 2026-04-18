@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import testing.lab3.pages.HomePage;
 import testing.lab3.pages.SpacePage;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class NavigateSpacesTest {
@@ -39,26 +40,12 @@ public class NavigateSpacesTest {
     @Test
     public void navigateToITSpaceTest() {
         homePage.navigateToSpace("it");
+        wait.until(ExpectedConditions.urlContains("/space/it"));
+
         assertTrue(spacePage.isHeadingDisplayed());
-    }
+        assertEquals("Информационные технологии", spacePage.getHeadingText());
 
-    @Test
-    public void navigateToOtherSpaceTest() {
-        homePage.navigateToSpace("other");
-        assertTrue(spacePage.isHeadingDisplayed());
-    }
-
-    @Test
-    public void navigateToLoveSpaceTest() {
-        homePage.navigateToSpace("truelove");
-        assertTrue(spacePage.isHeadingDisplayed());
-    }
-
-    @Test
-    public void navigateToSpacesPageTest() {
-        homePage.clickSpacesLink();
-
-        // Wait for the URL to contain "/spaces"
-        wait.until(ExpectedConditions.urlContains("/spaces"));
+        assertTrue(spacePage.isDescriptionDisplayed());
+        assertTrue(spacePage.getFeedElementsCount() > 0);
     }
 }

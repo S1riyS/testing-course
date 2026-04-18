@@ -29,6 +29,9 @@ public class AskPage extends Page {
     @FindBy(xpath = "//*[@id='editor-ask-form-editor']/div/p")
     private WebElement questionTextArea;
 
+    @FindBy(xpath = "//span[contains(concat(' ', normalize-space(@class), ' '), ' _validation_error')]")
+    private WebElement invalidQuestionMessage;
+
     // Space select
 
     @FindBy(xpath = "//button[contains(normalize-space(), 'Выбрать')]")
@@ -99,7 +102,7 @@ public class AskPage extends Page {
         questionPublicationButton.click();
     }
 
-    public void createQuestion() {
+    public String createQuestion() {
         String title = "Тестовый вопрос (Selenium WebDriver) " + randomSuffix(8);
         this.fillQuestion(title, "## Header\nBody of my impeccable question!");
 
@@ -109,14 +112,14 @@ public class AskPage extends Page {
 
         // Publish
         questionPublicationButton.click();
+
+        return title;
     }
 
     public void createInvalidQuestion() {
         this.fillQuestion("\t\t\t", "   ");
 
-        // Scroll down to space selection
-        this.scroll(600);
-        selectProgrammingSpace();
+        questionPublicationButton.click();
     }
 
     public Boolean isPublicationButtonEnabled() {
@@ -129,5 +132,13 @@ public class AskPage extends Page {
             sb.append(ALPHANUM.charAt(RND.nextInt(ALPHANUM.length())));
         }
         return sb.toString();
+    }
+
+    public WebElement getInvalidQuestionMessag() {
+        return invalidQuestionMessage;
+    }
+
+    public Boolean isInvalidQuestionMessageDisplayed() {
+        return invalidQuestionMessage.isDisplayed();
     }
 }

@@ -24,6 +24,12 @@ public class QuestionPage extends Page {
     @FindBy(xpath = "//button[contains(., 'Отправить')]")
     private WebElement sendAnswerButton;
 
+    @FindBy(xpath = "(//span[contains(@class, '_ReplyItemMy')])[1]")
+    private WebElement myReply;
+
+    @FindBy(xpath = "(//div[.//span[contains(.,'Видео по теме')]]/following-sibling::div)[1]")
+    private WebElement videosOnTopic;
+
     public void setQuestionAnswer(String answer) {
         questionAnswerInput.click();
         questionAnswerInput.sendKeys(answer);
@@ -43,5 +49,17 @@ public class QuestionPage extends Page {
 
     public boolean isSendAnswerButtonEnabled() {
         return sendAnswerButton.isEnabled();
+    }
+
+    public boolean isVideosOnTopicDisplayed() {
+        return videosOnTopic.isDisplayed();
+    }
+
+    public WebElement getMyReply() {
+        return myReply;
+    }
+
+    public boolean isMyReplyDisplayed() {
+        return myReply.isDisplayed();
     }
 }

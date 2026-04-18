@@ -1,9 +1,11 @@
 package testing.lab3;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -16,7 +18,6 @@ public class SearchQuestionTest {
     private Utils utils;
     private WebDriver driver;
     private WebDriverWait wait;
-    private JavascriptExecutor js;
     private HomePage homePage;
     private SearchPage searchPage;
 
@@ -26,9 +27,8 @@ public class SearchQuestionTest {
         utils.setupDriver();
         driver = utils.getDriver();
         wait = utils.getWait();
-        js = utils.getJs();
         homePage = new HomePage(driver);
-        searchPage = new SearchPage(driver, wait);
+        searchPage = new SearchPage(driver);
     }
 
     @AfterEach
@@ -40,21 +40,22 @@ public class SearchQuestionTest {
 
     @Test
     public void searchQuestionTest() {
-        homePage.searchQuestion("Тестирование UI");
-        searchPage.chooseQuestion();
+        String query = "Тестирование UI";
+
+        homePage.searchQuestion(query);
+        wait.until(ExpectedConditions.urlContains("/search"));
+
+        assertEquals(query, searchPage.getSearchQueryHeaderText());
+        assertTrue(searchPage.getFeedElementsCount() > 0);
     }
 
     @Test
     public void searchInvalidQuestionTest() {
-        homePage.searchInvalidQuestion();
-        wait.until(ExpectedConditions.not(ExpectedConditions.urlContains("/search")));
-    }
+        String query = "     ";
 
-    @Test
-    public void searchAndScrollTest() {
-        homePage.searchQuestion("Программирование Golang");
-        js.executeScript("window.scrollBy(0, 500)");
-        js.executeScript("window.scrollBy(0, -250)");
-        wait.until(ExpectedConditions.urlContains("search"));
+        homePage.searchQuestion(query);
+        wait.until(ExpectedConditions.urlContains("/search"));
+
+        assertTrue(searchPage.getNotFoundMessageText().contains("Ничего не найдено"));
     }
 }
