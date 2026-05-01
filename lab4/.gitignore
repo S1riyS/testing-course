@@ -1,0 +1,6 @@
+ext/
+jmeter/
+jmeter.log
+
+load/result/*
+stress/result/*
