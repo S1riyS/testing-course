@@ -1,0 +1,20 @@
+[project]
+name = "stress-testing-statistics"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "S1riyS",email = "kirill.ankudinov.94@mail.ru"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy (<2.0)",
+    "matplotlib (>=3.10.9,<4.0.0)",
+    "pandas (<3)",
+    "statsmodels (>=0.14.6,<0.15.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
