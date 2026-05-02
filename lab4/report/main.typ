@@ -236,3 +236,64 @@
 
 == Конфигурация Jmeter
 
+- _Request_: Использует параметры *Конфигурации №3*
+- _Constant Throughput Time_: Аналогично нагрузочному тестированию (40 RPM)
+- _Duration Assertion_: Удален, т.к. конфигурация не справлялась даже с обычной нагрузкой
+
+#align(center)[
+  #block(above: 1em)[
+    #figure(
+      image("assets/stress_cfg_all.png", width: 100%),
+      caption: [Конфигурация Thread Group \ стресс тестирования],
+    )
+  ]
+]
+
+#pagebreak()
+
+== Результаты
+
+Так как _Duration Assertion_ удален,
+то единственная вариант получить ошибку - ответ с кодом 503.
+
+Из *9970* запросов таких было всего *1421*, т.е. *14.25%*.
+
+#align(center)[
+  #block(above: 1em)[
+    #figure(
+      image("assets/stress_result_requests_summary.png", width: 100%),
+      caption: [Requests Summary стресс тестирования],
+    )
+  ]
+]
+
+#align(center)[
+  #block(above: 1em)[
+    #figure(
+      image("assets/stress_result_response_time.png", width: 100%),
+      caption: [Интервалы между ошибками],
+    )
+  ]
+]
+
+#align(center)[
+  #block(above: 1em)[
+    #figure(
+      image("assets/stress_result_latency_and_failure.png", width: 100%),
+      caption: [Заредржка и частота ошибок \ в зависимости от количества одновременных запросов],
+    )
+  ]
+]
+
+#pagebreak()
+
+Большие значения "Interval Between Errors" - вероятно период восстановления системы
+
+#align(center)[
+  #block(above: 1em)[
+    #figure(
+      image("assets/stress_result_errors_interval.png", width: 100%),
+      caption: [Интервалы между ошибками],
+    )
+  ]
+]
