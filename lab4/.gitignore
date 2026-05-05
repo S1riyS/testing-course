@@ -2,5 +2,5 @@ ext/
 jmeter/
 jmeter.log
 
-load/result/*
-stress/result/*
+load/result/result.csv
+stress/result/result.csv

@@ -271,7 +271,7 @@
   #block(above: 1em)[
     #figure(
       image("assets/stress_result_response_time.png", width: 100%),
-      caption: [Интервалы между ошибками],
+      caption: [Время ответа],
     )
   ]
 ]
